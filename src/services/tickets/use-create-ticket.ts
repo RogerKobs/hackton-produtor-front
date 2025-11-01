@@ -1,7 +1,14 @@
 import { supabase } from '@/lib/supabase/client';
-import type { Ticket } from '@/stores/ticket-modal-store';
 
-export const useCreateTicket = async (ticket: Omit<Ticket, 'id'>) => {
+interface CreateTicketProps {
+  title: string;
+  category: string;
+  description: string;
+  status: string;
+  id_producers: string;
+}
+
+export const useCreateTicket = async (ticket: CreateTicketProps) => {
   const { data, error } = await supabase.from('tickets').insert(ticket);
 
   if (error) {

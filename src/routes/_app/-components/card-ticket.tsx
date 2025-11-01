@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, UserCircle } from 'lucide-react';
-import { useTicketModalStore, type Ticket } from '@/stores/ticket-modal-store';
+import { useTicketModalStore } from '@/stores/ticket-modal-store';
+import { cn } from '@/lib/utils';
 
 const CATEGORY_LABELS: Record<string, string> = {
-  technical: 'Assistência Técnica',
-  financial: 'Consultoria Financeira',
-  legal: 'Assessoria Jurídica',
+  technical: 'Assistência Veterinária',
+  financial: 'Assistência Agronômica',
+  legal: 'Assistência de Infraestrutura',
   training: 'Capacitação',
   other: 'Outros',
 };
@@ -19,18 +20,25 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_VARIANTS: Record<
-  string,
-  'default' | 'secondary' | 'destructive' | 'outline'
-> = {
-  pending: 'secondary',
-  scheduled: 'default',
-  in_progress: 'default',
-  completed: 'outline',
-  cancelled: 'destructive',
+const STATUS_COLORS: Record<string, string> = {
+  pending: 'bg-[#eb7b24] text-white border-transparent',
+  scheduled: 'bg-[#3b82f6] text-white border-transparent',
+  in_progress: 'bg-[#6366f1] text-white border-transparent',
+  completed: 'bg-[#008f35] text-white border-transparent',
+  cancelled: 'bg-[#000000] text-white border-transparent',
 };
 
-type CardTicketProps = Ticket;
+interface CardTicketProps {
+  id: number;
+  title: string;
+  category: string;
+  created_at: string;
+  status: string;
+  description: string;
+  scheduling_at: string;
+  technician_name: string;
+  id_producers: string;
+}
 
 export function CardTicket({
   id,
@@ -41,6 +49,7 @@ export function CardTicket({
   description,
   scheduling_at,
   technician_name,
+  id_producers,
 }: CardTicketProps) {
   const { openModal } = useTicketModalStore();
 
@@ -54,6 +63,7 @@ export function CardTicket({
       description,
       scheduling_at,
       technician_name,
+      id_producers,
     });
   };
 
@@ -65,8 +75,11 @@ export function CardTicket({
       <CardHeader className='pb-3'>
         <div className='flex items-start justify-between gap-2 mb-2'>
           <Badge
-            variant={STATUS_VARIANTS[status] || 'default'}
-            className='text-xs'
+            className={cn(
+              'text-xs',
+              STATUS_COLORS[status] ||
+                'bg-[#008f35] text-white border-transparent',
+            )}
           >
             {STATUS_LABELS[status] || status}
           </Badge>
@@ -79,8 +92,11 @@ export function CardTicket({
           </span>
         </div>
 
-        <CardTitle className='text-base leading-tight'>
-          {CATEGORY_LABELS[category] || category}
+        <CardTitle className='text-base leading-tight flex items-center gap-2'>
+          {title}
+          <Badge variant='outline' className='text-xs'>
+            {CATEGORY_LABELS[category] || category}
+          </Badge>
         </CardTitle>
       </CardHeader>
 

@@ -51,7 +51,6 @@ export function DatePicker({ name }: DatePickerProps) {
 
         const handleDateChange = (date: Date | undefined) => {
           if (!date) return;
-          // Mantém a hora existente ou usa 00:00:00
           const newDate = new Date(date);
           if (currentDate) {
             newDate.setHours(currentDate.getHours());

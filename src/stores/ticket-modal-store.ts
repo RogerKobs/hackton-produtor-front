@@ -9,6 +9,9 @@ export interface Ticket {
   created_at: string;
   scheduling_at: string;
   technician_name: string;
+  id_producers: string;
+  id_technicians?: string;
+  comments?: string;
 }
 
 interface TicketModalStore {
@@ -16,6 +19,7 @@ interface TicketModalStore {
   selectedTicket: Ticket | null;
   openModal: (ticket?: Ticket) => void;
   closeModal: VoidFunction;
+  updateSelectedTicket: (ticket: Partial<Ticket>) => void;
 }
 
 export const useTicketModalStore = create<TicketModalStore>((set) => ({
@@ -23,4 +27,10 @@ export const useTicketModalStore = create<TicketModalStore>((set) => ({
   selectedTicket: null,
   openModal: (ticket) => set({ isOpen: true, selectedTicket: ticket }),
   closeModal: () => set({ isOpen: false, selectedTicket: null }),
+  updateSelectedTicket: (updates) =>
+    set((state) => ({
+      selectedTicket: state.selectedTicket
+        ? { ...state.selectedTicket, ...updates }
+        : null,
+    })),
 }));

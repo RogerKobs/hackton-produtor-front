@@ -10,29 +10,29 @@ import {
 import { Bell, Check, Trash2 } from 'lucide-react';
 
 import { useQuery } from '@tanstack/react-query';
-import { useListNotification } from '@/services/notifications/use-list-notification';
+import { useListNotification as listNotification } from '@/services/notifications/use-list-notification';
+import { useUserStore } from '@/stores/user-store';
 
 export const Route = createFileRoute('/_app/notification')({
   component: Notification,
 });
 
 function Notification() {
+  const { user } = useUserStore();
+
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications'],
-    queryFn: useListNotification,
+    queryFn: () => listNotification(user?.id ?? ''),
+    staleTime: Infinity,
   });
 
   const unreadCount = notifications?.filter((n) => !n.read).length;
 
   const handleMarkAllAsRead = () => {};
 
-  const handleDelete = (id: string) => {
-    console.log(id);
-  };
+  const handleDelete = () => {};
 
-  const handleMarkAsRead = (id: string) => {
-    console.log(id);
-  };
+  const handleMarkAsRead = () => {};
 
   return (
     <div className='container mx-auto py-6 px-4 max-w-3xl'>
@@ -104,7 +104,7 @@ function Notification() {
                       <Button
                         variant='ghost'
                         size='sm'
-                        onClick={() => handleMarkAsRead(notification.id)}
+                        onClick={handleMarkAsRead}
                         title='Marcar como lida'
                       >
                         <Check className='h-4 w-4' />
@@ -113,7 +113,7 @@ function Notification() {
                     <Button
                       variant='ghost'
                       size='sm'
-                      onClick={() => handleDelete(notification.id)}
+                      onClick={handleDelete}
                       title='Excluir'
                     >
                       <Trash2 className='h-4 w-4' />
