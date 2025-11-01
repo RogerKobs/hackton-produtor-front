@@ -3,5 +3,6 @@ export interface IUser {
   name: string;
   cellphone: string;
   address: string;
-  production: string[];
+  production?: string[];
+  type: 'producer' | 'technician';
 }
