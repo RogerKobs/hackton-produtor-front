@@ -33,11 +33,19 @@ function Login() {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, [setUser]);
+
   const { mutateAsync } = useMutation({
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: (data) => {
       setUser(data);
+      localStorage.setItem('user', JSON.stringify(data));
       navigate({ to: '/' });
     },
     onError: (error) => {
