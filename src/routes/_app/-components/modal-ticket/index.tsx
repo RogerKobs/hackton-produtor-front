@@ -9,19 +9,33 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
 import { Calendar, UserCircle, Clock } from 'lucide-react';
 import { useTicketModalStore, type Ticket } from '@/stores/ticket-modal-store';
 import { FormProvider, useForm } from 'react-hook-form';
 import { STATUS_VARIANTS, STATUS_LABELS, CATEGORY_OPTIONS } from './options';
+
+import { Input } from '@/components/shared/Input';
 import { Textarea } from '@/components/shared/Textarea';
 import { Autocomplete } from '@/components/shared/Autocomplete';
+
+import { useUserStore } from '@/stores/user-store';
+import { formatDate } from '@/utils/format-string';
+
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useCreateTicket } from '@/services/tickets/use-create-ticket';
+import { useUpdateTicket } from '@/services/tickets/use-update-ticket';
+import { useListTickets as listTickets } from '@/services/tickets/use-list-tickets';
 
 export function ModalTicket() {
   const { isOpen, selectedTicket, closeModal } = useTicketModalStore();
   const isEditMode = !!selectedTicket;
 
+  const { user } = useUserStore();
+
   const form = useForm<Ticket>({
     defaultValues: {
+      title: '',
       category: '',
       description: '',
     },
@@ -30,6 +44,7 @@ export function ModalTicket() {
 
   useEffect(() => {
     if (selectedTicket) {
+      setValue('title', selectedTicket.title);
       setValue('category', selectedTicket.category);
       setValue('description', selectedTicket.description);
     } else {
@@ -37,20 +52,52 @@ export function ModalTicket() {
     }
   }, [selectedTicket, isOpen, setValue, reset]);
 
-  const onSubmit = ({ category, description }: Ticket) => {
+  const { refetch: refetchTickets } = useQuery({
+    queryKey: ['tickets'],
+    queryFn: () => listTickets(user?.id ?? ''),
+  });
+
+  const { mutateAsync: createTicket } = useMutation({
+    mutationKey: ['createTicket'],
+    mutationFn: useCreateTicket,
+    onSuccess: () => {
+      closeModal();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const { mutateAsync: updateTicket } = useMutation({
+    mutationKey: ['updateTicket'],
+    mutationFn: useUpdateTicket,
+    onSuccess: () => {
+      closeModal();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const onSubmit = async ({ title, category, description }: Ticket) => {
     if (isEditMode) {
-      console.log('Atualizar chamado:', selectedTicket?.id, {
+      await updateTicket({
+        id: selectedTicket?.id ?? 0,
+        title,
         category,
         description,
       });
     } else {
-      console.log('Criar chamado:', {
+      await createTicket({
+        title,
         category,
         description,
+        status: 'pending',
+        id_producers: user?.id ?? '',
       });
     }
-
-    // closeModal();
+    refetchTickets();
+    closeModal();
 
     if (!isEditMode) {
       reset();
@@ -111,18 +158,7 @@ export function ModalTicket() {
                 </label>
                 <div className='flex items-center gap-1.5 text-sm'>
                   <Calendar className='h-4 w-4 text-muted-foreground' />
-                  <span>
-                    {new Date(selectedTicket.created_at).toLocaleDateString(
-                      'pt-BR',
-                      {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      },
-                    )}
-                  </span>
+                  <span>{formatDate(selectedTicket.created_at)}</span>
                 </div>
               </div>
 
@@ -135,17 +171,7 @@ export function ModalTicket() {
                   <div className='flex items-center gap-1.5 text-sm'>
                     <Clock className='h-4 w-4 text-muted-foreground' />
 
-                    <span>
-                      {new Date(
-                        selectedTicket.scheduling_at,
-                      ).toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
+                    <span>{formatDate(selectedTicket.scheduling_at)}</span>
                   </div>
                 </div>
               )}
@@ -168,11 +194,19 @@ export function ModalTicket() {
 
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <FormProvider {...form}>
+            <Input
+              name='title'
+              label='Título'
+              placeholder='Digite o título do chamado'
+              disabled={isEditMode && selectedTicket?.status !== 'pending'}
+            />
+
             <div className='space-y-2'>
               <Autocomplete
                 name='category'
                 label='Categoria'
                 options={CATEGORY_OPTIONS}
+                disabled={isEditMode && selectedTicket?.status !== 'pending'}
               />
             </div>
 
@@ -182,6 +216,7 @@ export function ModalTicket() {
                 label='Descrição'
                 rows={4}
                 placeholder='Descreva o problema ou necessidade...'
+                disabled={isEditMode && selectedTicket?.status !== 'pending'}
               />
             </div>
 

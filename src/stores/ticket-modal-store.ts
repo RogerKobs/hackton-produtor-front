@@ -9,6 +9,7 @@ export interface Ticket {
   created_at: string;
   scheduling_at: string;
   technician_name: string;
+  id_producers: string;
 }
 
 interface TicketModalStore {

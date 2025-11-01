@@ -23,9 +23,15 @@ interface AutocompleteProps {
   name: string;
   label: string;
   options: { value: string; label: string }[];
+  disabled?: boolean;
 }
 
-export function Autocomplete({ name, label, options }: AutocompleteProps) {
+export function Autocomplete({
+  name,
+  label,
+  options,
+  disabled,
+}: AutocompleteProps) {
   const [open, setOpen] = useState(false);
   const { control } = useFormContext();
 
@@ -43,6 +49,7 @@ export function Autocomplete({ name, label, options }: AutocompleteProps) {
                 role='combobox'
                 aria-expanded={open}
                 className='w-full justify-between'
+                disabled={disabled}
               >
                 {value
                   ? options.find((item) => item.value === value)?.label

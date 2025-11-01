@@ -4,16 +4,20 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CardTicket } from './-components/card-ticket';
 
 import { useQuery } from '@tanstack/react-query';
-import { useListTickets } from '@/services/tickets/use-list-tickets';
+import { useListTickets as listTickets } from '@/services/tickets/use-list-tickets';
+
+import { useUserStore } from '@/stores/user-store';
 
 export const Route = createFileRoute('/_app/')({
   component: Painel,
 });
 
 function Painel() {
+  const { user } = useUserStore();
+
   const { data: tickets } = useQuery({
     queryKey: ['tickets'],
-    queryFn: useListTickets,
+    queryFn: () => listTickets(user?.id ?? ''),
   });
 
   return (

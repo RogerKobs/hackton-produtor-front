@@ -10,16 +10,19 @@ import {
 import { Bell, Check, Trash2 } from 'lucide-react';
 
 import { useQuery } from '@tanstack/react-query';
-import { useListNotification } from '@/services/notifications/use-list-notification';
+import { useListNotification as listNotification } from '@/services/notifications/use-list-notification';
+import { useUserStore } from '@/stores/user-store';
 
 export const Route = createFileRoute('/_app/notification')({
   component: Notification,
 });
 
 function Notification() {
+  const { user } = useUserStore();
+
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications'],
-    queryFn: useListNotification,
+    queryFn: () => listNotification(user?.id ?? ''),
   });
 
   const unreadCount = notifications?.filter((n) => !n.read).length;

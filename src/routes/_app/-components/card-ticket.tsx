@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, UserCircle } from 'lucide-react';
-import { useTicketModalStore, type Ticket } from '@/stores/ticket-modal-store';
+import { useTicketModalStore } from '@/stores/ticket-modal-store';
 
 const CATEGORY_LABELS: Record<string, string> = {
   technical: 'Assistência Técnica',
@@ -30,7 +30,17 @@ const STATUS_VARIANTS: Record<
   cancelled: 'destructive',
 };
 
-type CardTicketProps = Ticket;
+interface CardTicketProps {
+  id: number;
+  title: string;
+  category: string;
+  created_at: string;
+  status: string;
+  description: string;
+  scheduling_at: string;
+  technician_name: string;
+  id_producers: string;
+}
 
 export function CardTicket({
   id,
@@ -41,6 +51,7 @@ export function CardTicket({
   description,
   scheduling_at,
   technician_name,
+  id_producers,
 }: CardTicketProps) {
   const { openModal } = useTicketModalStore();
 
@@ -54,6 +65,7 @@ export function CardTicket({
       description,
       scheduling_at,
       technician_name,
+      id_producers,
     });
   };
 
@@ -79,8 +91,11 @@ export function CardTicket({
           </span>
         </div>
 
-        <CardTitle className='text-base leading-tight'>
-          {CATEGORY_LABELS[category] || category}
+        <CardTitle className='text-base leading-tight flex items-center gap-2'>
+          {title}
+          <Badge variant='outline' className='text-xs'>
+            {CATEGORY_LABELS[category] || category}
+          </Badge>
         </CardTitle>
       </CardHeader>
 
