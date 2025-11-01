@@ -4,9 +4,9 @@ import { Calendar, UserCircle } from 'lucide-react';
 import { useTicketModalStore } from '@/stores/ticket-modal-store';
 
 const CATEGORY_LABELS: Record<string, string> = {
-  technical: 'Assistência Técnica',
-  financial: 'Consultoria Financeira',
-  legal: 'Acessoria Jurídica',
+  technical: 'Assistência Veterinária',
+  financial: 'Assistência Agronômica',
+  legal: 'Assistência de Infraestrutura',
   training: 'Capacitação',
   other: 'Outros',
 };
