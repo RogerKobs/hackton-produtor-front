@@ -5,6 +5,8 @@ import { CardTicket } from './-components/card-ticket';
 
 import { useQuery } from '@tanstack/react-query';
 import { useListTickets } from '@/services/tickets/use-list-tickets';
+import { useUserStore } from '@/stores/user-store';
+
 
 export const Route = createFileRoute('/_app/')({
   component: Painel,
@@ -15,12 +17,12 @@ function Painel() {
     queryKey: ['tickets'],
     queryFn: useListTickets,
   });
-
+  const {user} = useUserStore();
   return (
     <div className='p-6'>
       <h1 className='text-3xl font-bold mb-4'>Painel</h1>
       <p className='text-muted-foreground'>
-        Bem-vindo ao Sistema Rural. Use o menu lateral para navegar.
+        Seja bem vindo, {user?.name}. Este é o AgroGuia. Use o menu lateral para navegar.
       </p>
 
       {tickets?.length === 0 ? (

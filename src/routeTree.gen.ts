@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppLayoutRouteImport } from './routes/_app/layout'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppNotificationRouteImport } from './routes/_app/notification'
 
 const AppLayoutRoute = AppLayoutRouteImport.update({
@@ -28,6 +29,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
 const AppNotificationRoute = AppNotificationRouteImport.update({
   id: '/notification',
   path: '/notification',
@@ -36,11 +42,13 @@ const AppNotificationRoute = AppNotificationRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/notification': typeof AppNotificationRoute
+  '/profile': typeof AppProfileRoute
   '/login': typeof AuthLoginRoute
   '/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/notification': typeof AppNotificationRoute
+  '/profile': typeof AppProfileRoute
   '/login': typeof AuthLoginRoute
   '/': typeof AppIndexRoute
 }
@@ -48,15 +56,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppLayoutRouteWithChildren
   '/_app/notification': typeof AppNotificationRoute
+  '/_app/profile': typeof AppProfileRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/notification' | '/login' | '/'
+  fullPaths: '/notification' | '/profile' | '/login' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/notification' | '/login' | '/'
-  id: '__root__' | '/_app' | '/_app/notification' | '/_auth/login' | '/_app/'
+  to: '/notification' | '/profile' | '/login' | '/'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/notification'
+    | '/_app/profile'
+    | '/_auth/login'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
     '/_app/notification': {
       id: '/_app/notification'
       path: '/notification'
@@ -99,11 +121,13 @@ declare module '@tanstack/react-router' {
 
 interface AppLayoutRouteChildren {
   AppNotificationRoute: typeof AppNotificationRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppNotificationRoute: AppNotificationRoute,
+  AppProfileRoute: AppProfileRoute,
   AppIndexRoute: AppIndexRoute,
 }
 

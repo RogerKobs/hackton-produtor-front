@@ -37,7 +37,7 @@ function Login() {
     mutationKey: ['login'],
     mutationFn: login,
     onSuccess: (data) => {
-      setUser(data);
+      setUser({...data, production: Array.isArray(data.production) ? data.production : JSON.parse(data.production)});
       navigate({ to: '/' });
     },
     onError: (error) => {

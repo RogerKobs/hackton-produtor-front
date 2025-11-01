@@ -7,7 +7,7 @@ import { Link, useLocation } from '@tanstack/react-router';
 const navItems = [
   { href: '/', label: 'Início', icon: Home },
   { href: '/notification', label: 'Notificações', icon: Bell },
-  { href: '/perfil', label: 'Meu Perfil', icon: User },
+  { href: '/profile', label: 'Meu Perfil', icon: User },
 ];
 
 interface AppSidebarProps {
