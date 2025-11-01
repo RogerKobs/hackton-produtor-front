@@ -59,7 +59,9 @@ function RouteComponent() {
                       Produção
                     </label>
                     <div className='flex flex-wrap gap-2 mt-2'>
-                      {user.production.map((production, index) => (
+                      {JSON.parse(
+                        (user.production as unknown as string) ?? '[]',
+                      ).map((production: string, index: number) => (
                         <Badge
                           key={index}
                           variant='outline'
