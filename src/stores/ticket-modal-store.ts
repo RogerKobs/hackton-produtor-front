@@ -2,11 +2,12 @@ import { create } from 'zustand';
 
 export interface Ticket {
   id: number;
-  category: string;
-  created_at: string;
+  title: string;
   status: string;
   description: string;
-  scheduled_time: string;
+  category: string;
+  created_at: string;
+  scheduling_at: string;
   technician_name: string;
 }
 
@@ -14,7 +15,7 @@ interface TicketModalStore {
   isOpen: boolean;
   selectedTicket: Ticket | null;
   openModal: (ticket?: Ticket) => void;
-  closeModal: () => void;
+  closeModal: VoidFunction;
 }
 
 export const useTicketModalStore = create<TicketModalStore>((set) => ({

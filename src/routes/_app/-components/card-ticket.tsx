@@ -34,11 +34,12 @@ type CardTicketProps = Ticket;
 
 export function CardTicket({
   id,
+  title,
   category,
   created_at,
   status,
   description,
-  scheduled_time,
+  scheduling_at,
   technician_name,
 }: CardTicketProps) {
   const { openModal } = useTicketModalStore();
@@ -46,11 +47,12 @@ export function CardTicket({
   const handleClick = () => {
     openModal({
       id,
+      title,
       category,
       created_at,
       status,
       description,
-      scheduled_time,
+      scheduling_at,
       technician_name,
     });
   };
@@ -68,6 +70,7 @@ export function CardTicket({
           >
             {STATUS_LABELS[status] || status}
           </Badge>
+
           <span className='text-xs text-muted-foreground'>
             {new Date(created_at).toLocaleDateString('pt-BR', {
               day: '2-digit',
@@ -75,21 +78,24 @@ export function CardTicket({
             })}
           </span>
         </div>
+
         <CardTitle className='text-base leading-tight'>
           {CATEGORY_LABELS[category] || category}
         </CardTitle>
       </CardHeader>
+
       <CardContent className='flex-1 space-y-3 pt-0'>
         <p className='text-sm text-muted-foreground line-clamp-2'>
           {description}
         </p>
         <div className='space-y-1.5 text-xs'>
-          {scheduled_time && (
+          {scheduling_at && (
             <div className='flex items-center gap-1.5 text-muted-foreground'>
               <Calendar className='h-3.5 w-3.5' />
-              <span>{new Date(scheduled_time).toLocaleString('pt-BR')}</span>
+              <span>{new Date(scheduling_at).toLocaleString('pt-BR')}</span>
             </div>
           )}
+
           {technician_name && (
             <div className='flex items-center gap-1.5 text-muted-foreground'>
               <UserCircle className='h-3.5 w-3.5' />

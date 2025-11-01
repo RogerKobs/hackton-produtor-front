@@ -13,6 +13,8 @@ import { Calendar, UserCircle, Clock } from 'lucide-react';
 import { useTicketModalStore, type Ticket } from '@/stores/ticket-modal-store';
 import { FormProvider, useForm } from 'react-hook-form';
 import { STATUS_VARIANTS, STATUS_LABELS, CATEGORY_OPTIONS } from './options';
+import { Textarea } from '@/components/shared/Textarea';
+import { Autocomplete } from '@/components/shared/Autocomplete';
 
 export function ModalTicket() {
   const { isOpen, selectedTicket, closeModal } = useTicketModalStore();
@@ -24,17 +26,18 @@ export function ModalTicket() {
       description: '',
     },
   });
+  const { setValue, handleSubmit, reset } = form;
 
   useEffect(() => {
     if (selectedTicket) {
-      form.setValue('category', selectedTicket.category);
-      form.setValue('description', selectedTicket.description);
+      setValue('category', selectedTicket.category);
+      setValue('description', selectedTicket.description);
     } else {
-      form.reset();
+      reset();
     }
-  }, [selectedTicket, isOpen, form]);
+  }, [selectedTicket, isOpen, setValue, reset]);
 
-  const handleSubmit = ({ category, description }: Ticket) => {
+  const onSubmit = ({ category, description }: Ticket) => {
     if (isEditMode) {
       console.log('Atualizar chamado:', selectedTicket?.id, {
         category,
@@ -47,10 +50,10 @@ export function ModalTicket() {
       });
     }
 
-    closeModal();
+    // closeModal();
 
     if (!isEditMode) {
-      form.reset();
+      reset();
     }
   };
 
@@ -122,7 +125,8 @@ export function ModalTicket() {
                   </span>
                 </div>
               </div>
-              {selectedTicket.scheduled_time && (
+
+              {selectedTicket.scheduling_at && (
                 <div className='space-y-1'>
                   <label className='text-xs font-medium text-muted-foreground'>
                     Data Agendada
@@ -133,7 +137,7 @@ export function ModalTicket() {
 
                     <span>
                       {new Date(
-                        selectedTicket.scheduled_time,
+                        selectedTicket.scheduling_at,
                       ).toLocaleDateString('pt-BR', {
                         day: '2-digit',
                         month: '2-digit',
@@ -162,44 +166,22 @@ export function ModalTicket() {
           </div>
         )}
 
-        <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <FormProvider {...form}>
             <div className='space-y-2'>
-              <label
-                htmlFor='category'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-              >
-                Categoria
-              </label>
-
-              <select
-                {...form.register('category')}
-                required
-                disabled={isEditMode}
-                className='flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-              >
-                <option value=''>Selecione uma categoria</option>
-                {CATEGORY_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <Autocomplete
+                name='category'
+                label='Categoria'
+                options={CATEGORY_OPTIONS}
+              />
             </div>
 
             <div className='space-y-2'>
-              <label
-                htmlFor='description'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-              >
-                Descrição
-              </label>
-              <textarea
-                {...form.register('description')}
-                required
+              <Textarea
+                name='description'
+                label='Descrição'
                 rows={4}
                 placeholder='Descreva o problema ou necessidade...'
-                className='flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
               />
             </div>
 

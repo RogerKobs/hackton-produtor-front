@@ -99,7 +99,7 @@ function Notification() {
                       </p>
                     </div>
                   </div>
-                  <div className='flex gap-1 shrink-0'>
+                  <div className='flex gap-1shrink-0'>
                     {!notification.read && (
                       <Button
                         variant='ghost'
