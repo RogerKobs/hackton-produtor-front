@@ -5,8 +5,6 @@ import { CardTicket } from './-components/card-ticket';
 
 import { useQuery } from '@tanstack/react-query';
 import { useListTickets } from '@/services/tickets/use-list-tickets';
-import { Button } from '@/components/ui/button';
-import { seed } from '@/services/seed';
 
 export const Route = createFileRoute('/_app/')({
   component: Painel,
@@ -20,7 +18,6 @@ function Painel() {
 
   return (
     <div className='p-6'>
-      <Button onClick={seed}>Seed</Button>
       <h1 className='text-3xl font-bold mb-4'>Painel</h1>
       <p className='text-muted-foreground'>
         Bem-vindo ao Sistema Rural. Use o menu lateral para navegar.

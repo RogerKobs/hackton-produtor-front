@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router';
 
 import { AppHeader } from '@/components/app-header';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { ModalTicket } from './-components/modal-ticket';
 import { useTicketModalStore } from '@/stores/ticket-modal-store';
+import { useUserStore } from '@/stores/user-store';
 
 export const Route = createFileRoute('/_app')({
   component: Layout,
@@ -15,6 +16,12 @@ export const Route = createFileRoute('/_app')({
 function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { openModal } = useTicketModalStore();
+
+  const { user } = useUserStore();
+
+  if (!user) {
+    return <Navigate to='/login' />;
+  }
 
   return (
     <div className='flex h-screen overflow-hidden'>
