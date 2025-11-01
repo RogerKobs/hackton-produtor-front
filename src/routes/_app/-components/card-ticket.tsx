@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, UserCircle } from 'lucide-react';
 import { useTicketModalStore } from '@/stores/ticket-modal-store';
+import { cn } from '@/lib/utils';
 
 const CATEGORY_LABELS: Record<string, string> = {
   technical: 'Assistência Veterinária',
@@ -19,12 +20,12 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  pending: { bg: '#eb7b24', text: '#ffffff' },
-  scheduled: { bg: '#008f35', text: '#ffffff' },
-  in_progress: { bg: '#eb7b24', text: '#ffffff' },
-  completed: { bg: '#008f35', text: '#ffffff' },
-  cancelled: { bg: '#000000', text: '#ffffff' },
+const STATUS_COLORS: Record<string, string> = {
+  pending: 'bg-[#eb7b24] text-white border-transparent',
+  scheduled: 'bg-[#3b82f6] text-white border-transparent',
+  in_progress: 'bg-[#6366f1] text-white border-transparent',
+  completed: 'bg-[#008f35] text-white border-transparent',
+  cancelled: 'bg-[#000000] text-white border-transparent',
 };
 
 interface CardTicketProps {
@@ -74,11 +75,11 @@ export function CardTicket({
       <CardHeader className='pb-3'>
         <div className='flex items-start justify-between gap-2 mb-2'>
           <Badge
-            className='text-xs border-transparent'
-            style={{
-              backgroundColor: STATUS_COLORS[status]?.bg || '#008f35',
-              color: STATUS_COLORS[status]?.text || '#ffffff',
-            }}
+            className={cn(
+              'text-xs',
+              STATUS_COLORS[status] ||
+                'bg-[#008f35] text-white border-transparent',
+            )}
           >
             {STATUS_LABELS[status] || status}
           </Badge>

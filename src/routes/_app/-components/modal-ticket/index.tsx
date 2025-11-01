@@ -16,6 +16,7 @@ import { Calendar, UserCircle, Clock } from 'lucide-react';
 import { useTicketModalStore, type Ticket } from '@/stores/ticket-modal-store';
 import { FormProvider, useForm } from 'react-hook-form';
 import { STATUS_COLORS, STATUS_LABELS, CATEGORY_OPTIONS } from './options';
+import { cn } from '@/lib/utils';
 
 import { Input } from '@/components/shared/Input';
 import { Autocomplete } from '@/components/shared/Autocomplete';
@@ -259,14 +260,11 @@ export function ModalTicket() {
                   </label>
                   <div>
                     <Badge
-                      className='text-xs border-transparent'
-                      style={{
-                        backgroundColor:
-                          STATUS_COLORS[selectedTicket.status]?.bg || '#008f35',
-                        color:
-                          STATUS_COLORS[selectedTicket.status]?.text ||
-                          '#ffffff',
-                      }}
+                      className={cn(
+                        'text-xs',
+                        STATUS_COLORS[selectedTicket.status] ||
+                          'bg-[#008f35] text-white border-transparent',
+                      )}
                     >
                       {STATUS_LABELS[selectedTicket.status] ||
                         selectedTicket.status}
