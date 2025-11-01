@@ -1,7 +1,7 @@
 export const CATEGORY_OPTIONS = [
-  { label: 'Assistência Técnica', value: 'technical' },
-  { label: 'Consultoria Financeira', value: 'financial' },
-  { label: 'Acessoria Jurídica', value: 'legal' },
+  { label: 'Assistência Veterinária', value: 'technical' },
+  { label: 'Assistência Agronômica', value: 'financial' },
+  { label: 'Assistência de Infraestrutura', value: 'legal' },
   { label: 'Capacitação', value: 'training' },
   { label: 'Outros', value: 'other' },
 ];
