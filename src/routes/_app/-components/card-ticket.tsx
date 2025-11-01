@@ -6,7 +6,7 @@ import { useTicketModalStore } from '@/stores/ticket-modal-store';
 const CATEGORY_LABELS: Record<string, string> = {
   technical: 'Assistência Técnica',
   financial: 'Consultoria Financeira',
-  legal: 'Assessoria Jurídica',
+  legal: 'Acessoria Jurídica',
   training: 'Capacitação',
   other: 'Outros',
 };
