@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useUserStore } from '@/stores/user-store';
 
 interface AppHeaderProps {
   onMenuClick: VoidFunction;
@@ -11,6 +12,8 @@ interface AppHeaderProps {
 
 export function AppHeader({ onMenuClick, onNewTicketClick }: AppHeaderProps) {
   const [unreadCount, setUnreadCount] = useState(0);
+  const { user } = useUserStore();
+  const isTechnician = user?.type === 'technician';
 
   useEffect(() => {
     loadUnreadCount();
@@ -35,10 +38,12 @@ export function AppHeader({ onMenuClick, onNewTicketClick }: AppHeaderProps) {
         <div className='flex-1' />
 
         <div className='flex items-center gap-2'>
-          <Button size='sm' className='gap-2' onClick={onNewTicketClick}>
-            <Plus className='h-4 w-4' />
-            <span className='hidden sm:inline'>Novo Chamado</span>
-          </Button>
+          {!isTechnician && (
+            <Button size='sm' className='gap-2' onClick={onNewTicketClick}>
+              <Plus className='h-4 w-4' />
+              <span className='hidden sm:inline'>Novo Chamado</span>
+            </Button>
+          )}
 
           <Button asChild variant='ghost' size='icon' className='relative'>
             <Link to='/'>

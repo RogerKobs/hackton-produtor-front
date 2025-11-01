@@ -2,7 +2,8 @@ import { Bell, Home, User, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
+import { useUserStore } from '@/stores/user-store';
 
 const navItems = [
   { href: '/', label: 'Início', icon: Home },
@@ -11,11 +12,21 @@ const navItems = [
 ];
 
 interface AppSidebarProps {
-  onClose?: () => void;
+  onClose?: VoidFunction;
 }
 
 export function AppSidebar({ onClose }: AppSidebarProps) {
   const pathname = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useUserStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: '/login' });
+    if (onClose) {
+      onClose();
+    }
+  };
 
   return (
     <div className='flex h-full flex-col bg-background border-r'>
@@ -64,7 +75,7 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
         <Button
           variant='ghost'
           className='w-full justify-start text-muted-foreground hover:text-foreground'
-          onClick={() => console.log('Saindo...')}
+          onClick={handleLogout}
         >
           <LogOut className='mr-3 h-5 w-5' />
           Sair

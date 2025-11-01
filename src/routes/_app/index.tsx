@@ -16,8 +16,9 @@ function Painel() {
   const { user } = useUserStore();
 
   const { data: tickets } = useQuery({
-    queryKey: ['tickets'],
-    queryFn: () => listTickets(user?.id ?? ''),
+    queryKey: ['tickets', user?.id],
+    queryFn: () => listTickets(user),
+    staleTime: Infinity,
   });
 
   return (
