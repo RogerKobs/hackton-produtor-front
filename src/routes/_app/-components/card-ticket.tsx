@@ -19,15 +19,12 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelado',
 };
 
-const STATUS_VARIANTS: Record<
-  string,
-  'default' | 'secondary' | 'destructive' | 'outline'
-> = {
-  pending: 'secondary',
-  scheduled: 'default',
-  in_progress: 'default',
-  completed: 'outline',
-  cancelled: 'destructive',
+const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
+  pending: { bg: '#eb7b24', text: '#ffffff' },
+  scheduled: { bg: '#008f35', text: '#ffffff' },
+  in_progress: { bg: '#eb7b24', text: '#ffffff' },
+  completed: { bg: '#008f35', text: '#ffffff' },
+  cancelled: { bg: '#000000', text: '#ffffff' },
 };
 
 interface CardTicketProps {
@@ -77,8 +74,11 @@ export function CardTicket({
       <CardHeader className='pb-3'>
         <div className='flex items-start justify-between gap-2 mb-2'>
           <Badge
-            variant={STATUS_VARIANTS[status] || 'default'}
-            className='text-xs'
+            className='text-xs border-transparent'
+            style={{
+              backgroundColor: STATUS_COLORS[status]?.bg || '#008f35',
+              color: STATUS_COLORS[status]?.text || '#ffffff',
+            }}
           >
             {STATUS_LABELS[status] || status}
           </Badge>

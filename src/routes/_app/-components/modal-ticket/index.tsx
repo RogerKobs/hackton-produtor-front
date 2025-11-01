@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, UserCircle, Clock } from 'lucide-react';
 import { useTicketModalStore, type Ticket } from '@/stores/ticket-modal-store';
 import { FormProvider, useForm } from 'react-hook-form';
-import { STATUS_VARIANTS, STATUS_LABELS, CATEGORY_OPTIONS } from './options';
+import { STATUS_COLORS, STATUS_LABELS, CATEGORY_OPTIONS } from './options';
 
 import { Input } from '@/components/shared/Input';
 import { Textarea } from '@/components/shared/Textarea';
@@ -141,10 +141,13 @@ export function ModalTicket() {
                 </label>
                 <div>
                   <Badge
-                    variant={
-                      STATUS_VARIANTS[selectedTicket.status] || 'default'
-                    }
-                    className='text-xs'
+                    className='text-xs border-transparent'
+                    style={{
+                      backgroundColor:
+                        STATUS_COLORS[selectedTicket.status]?.bg || '#008f35',
+                      color:
+                        STATUS_COLORS[selectedTicket.status]?.text || '#ffffff',
+                    }}
                   >
                     {STATUS_LABELS[selectedTicket.status] ||
                       selectedTicket.status}

@@ -85,7 +85,7 @@ export function Autocomplete({
                         <Check
                           className={cn(
                             'ml-auto',
-                            value === item.value ? 'opacity-100' : 'opacity-0',
+                            value === item.value ? 'opacity-100 text-primary' : 'opacity-0',
                           )}
                         />
                       </CommandItem>

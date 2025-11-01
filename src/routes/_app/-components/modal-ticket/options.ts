@@ -24,3 +24,11 @@ export const STATUS_VARIANTS: Record<
   completed: 'outline',
   cancelled: 'destructive',
 };
+
+export const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
+  pending: { bg: '#eb7b24', text: '#ffffff' },
+  scheduled: { bg: '#008f35', text: '#ffffff' },
+  in_progress: { bg: '#eb7b24', text: '#ffffff' },
+  completed: { bg: '#008f35', text: '#ffffff' },
+  cancelled: { bg: '#000000', text: '#ffffff' },
+};

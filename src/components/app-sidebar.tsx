@@ -25,7 +25,13 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
           className='font-bold text-xl text-primary'
           onClick={onClose}
         >
-          Sistema Rural
+          <img
+            src='/logo.png'
+            alt='Logo'
+            width='100%'
+            className='h-15'
+            style={{ objectFit: 'contain' }}
+          />
         </Link>
       </div>
 
